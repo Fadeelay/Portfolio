@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 const projects = [
   {
     id: 1,
@@ -24,26 +26,35 @@ const projects = [
   },
   {
     id: 2,
-    title: 'Job & Contract Marketplace',
+    title: 'Campus Job Board (StudentHustle)',
     role: 'Full-Stack Developer (Solo)',
-    stack: ['Java', 'Spring Boot', 'React', 'MySQL', 'JPA'],
+    stack: ['Java 21', 'Spring Boot', 'Spring Security', 'Thymeleaf', 'PostgreSQL', 'Docker', 'Render'],
     problem:
-      'A platform where employers post short-term contracts and freelancers apply, track status, and communicate.',
+      'University students need one place to find on-campus and local jobs; employers need to post and manage listings; and the platform needs moderation so unapproved or spam postings never reach students.',
     architecture:
-      'Spring Boot REST API with JPA repositories, React SPA frontend using React Router and fetch for data loading.',
+      'Layered Spring Boot app (controller → service → repository) split into role-scoped routes (/student, /employer, /admin). A session-based Thymeleaf UI and a stateless JSON API (/api/**) share the same domain model but run through two separate Spring Security filter chains — form login for the web app, HTTP Basic for the API. Deployed as a Docker image on Render with a managed PostgreSQL database; a Spring profile (application-render.properties) swaps the local MySQL datasource for Postgres at deploy time via env vars, so the app code never changes between environments.',
     features: [
-      'JWT authentication with protected API endpoints',
-      'Employer and freelancer role flows',
-      'Contract posting, application, and status tracking',
-      'Responsive React UI with form validation',
+      'Three role-based dashboards (Student, Employer, Admin) gated entirely by Spring Security',
+      'Employer job postings stay PENDING until an admin approves or rejects them from a moderation queue',
+      'Students filter live listings by location, category, and salary range via dynamically composed JPA Specifications',
+      'One application per student per job enforced with a DB unique constraint plus a friendly error page',
+      'Employers move applicants through status stages (Applied → Reviewed → ...) per job posting',
+      'Built-in admin log viewer — a custom Logback appender feeds a thread-safe ring buffer so admins can see recent server activity without shelling into the box',
     ],
     challenges: [
-      'Debugged CORS issues between the Spring Boot API and React dev server.',
-      'Fixed lazy-loading N+1 query issue in JPA when fetching applications with related users.',
+      'Serving both a stateful Thymeleaf UI and a stateless JSON API from one app meant one security config would compromise the other — split into two @Order-ed SecurityFilterChains scoped by securityMatcher("/api/**"), each with its own auth scheme and exception handling.',
+      'Local development runs on MySQL but Render only offers managed Postgres — resolved with a SPRING_PROFILES_ACTIVE=render profile that swaps the JDBC URL/driver at deploy time instead of hardcoding a database.',
+      'A student double-clicking "Apply" could beat the app-level check and insert two applications — added a DB-level unique constraint on (job_id, student_id) plus a DuplicateApplicationException caught by a global exception handler for a clean error page instead of a 500.',
     ],
-    github: 'https://github.com/Fadeelay',
-    demo: null,
-    status: 'in-progress',
+    github: 'https://github.com/Fadeelay/campusjobboard1',
+    demo: 'https://campusjobboard.onrender.com',
+    status: 'complete',
+    images: [
+      { src: '/projects/campus-job-board/home.png', alt: 'StudentHustle landing page with job search' },
+      { src: '/projects/campus-job-board/admin-jobs.png', alt: 'Admin job moderation queue with approve/reject actions' },
+      { src: '/projects/campus-job-board/student-jobs.png', alt: 'Student job search with location, category, and salary filters' },
+      { src: '/projects/campus-job-board/employer-post-job.png', alt: 'Employer post-a-job form' },
+    ],
   },
   {
     id: 3,
@@ -90,6 +101,65 @@ const projects = [
 function StatusBadge({ status }) {
   if (status === 'complete') return <span className="badge-success">Complete</span>
   return <span className="badge-warning">In Progress</span>
+}
+
+function Slideshow({ images }) {
+  const [index, setIndex] = useState(0)
+  const go = (i) => setIndex((i + images.length) % images.length)
+
+  return (
+    <div className="mt-6">
+      <div className="relative rounded-xl overflow-hidden border border-surface-border bg-surface-raised">
+        <a href={images[index].src} target="_blank" rel="noreferrer">
+          <img
+            src={images[index].src}
+            alt={images[index].alt}
+            className="w-full max-h-[420px] object-contain object-center bg-black/5"
+          />
+        </a>
+
+        {images.length > 1 && (
+          <>
+            <button
+              type="button"
+              onClick={() => go(index - 1)}
+              aria-label="Previous screenshot"
+              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-surface-raised/90 border border-surface-border flex items-center justify-center text-content-primary hover:bg-primary hover:text-white transition-colors"
+            >
+              ‹
+            </button>
+            <button
+              type="button"
+              onClick={() => go(index + 1)}
+              aria-label="Next screenshot"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-surface-raised/90 border border-surface-border flex items-center justify-center text-content-primary hover:bg-primary hover:text-white transition-colors"
+            >
+              ›
+            </button>
+            <span className="absolute bottom-2 right-2 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-black/60 text-white">
+              {index + 1} / {images.length}
+            </span>
+          </>
+        )}
+      </div>
+
+      {images.length > 1 && (
+        <div className="flex gap-2 mt-3 justify-center">
+          {images.map((img, i) => (
+            <button
+              key={img.src}
+              type="button"
+              onClick={() => setIndex(i)}
+              aria-label={`Go to screenshot ${i + 1}`}
+              className={`w-2 h-2 rounded-full transition-colors ${
+                i === index ? 'bg-primary' : 'bg-surface-border hover:bg-primary/50'
+              }`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  )
 }
 
 export default function Projects() {
@@ -159,6 +229,9 @@ export default function Projects() {
                 </ul>
               </div>
             </div>
+
+            {/* Screenshots */}
+            {p.images && <Slideshow images={p.images} />}
 
             {/* Footer links */}
             <div className="flex gap-3 mt-6 pt-5 border-t border-surface-border">
