@@ -15,7 +15,7 @@ const projects = [
       'Admin dashboard for user and listing management',
     ],
     challenges: [
-      'Fixed a route mismatch that caused the delete button to silently fail — traced it through browser DevTools and ASP.NET routing logs.',
+      'Fixed a route mismatch that caused the delete button to silently fail — traced through DevTools and ASP.NET routing logs.',
       'Resolved ModelState validation errors that blocked listing creation when optional image fields were omitted.',
     ],
     github: 'https://github.com/Fadeelay',
@@ -87,67 +87,86 @@ const projects = [
   },
 ]
 
-const statusLabel = { complete: 'Complete', 'in-progress': 'In Progress' }
-const statusColor = {
-  complete: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  'in-progress': 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+function StatusBadge({ status }) {
+  if (status === 'complete') return <span className="badge-success">Complete</span>
+  return <span className="badge-warning">In Progress</span>
 }
 
 export default function Projects() {
   return (
     <section className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
-      <p className="font-mono text-sky-400 text-xs uppercase tracking-widest mb-3">Work</p>
+      <p className="section-label">Work</p>
       <h1 className="section-heading">Projects</h1>
       <p className="section-subheading">
         Case studies across multiple stacks — each documenting architecture, key features, and real debugging stories.
       </p>
 
-      <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-8">
         {projects.map((p) => (
           <article key={p.id} className="card">
+            {/* Header */}
             <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
               <div>
-                <h2 className="text-xl font-bold text-white">{p.title}</h2>
-                <p className="text-sm text-gray-500 mt-0.5">{p.role}</p>
+                <h2 className="text-lg font-bold text-content-primary">{p.title}</h2>
+                <p className="text-xs text-content-muted mt-0.5 font-semibold">{p.role}</p>
               </div>
-              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${statusColor[p.status]}`}>
-                {statusLabel[p.status]}
-              </span>
+              <StatusBadge status={p.status} />
             </div>
 
-            <div className="flex flex-wrap gap-2 mb-5">
+            {/* Stack */}
+            <div className="flex flex-wrap gap-2 mb-6">
               {p.stack.map((t) => <span key={t} className="badge">{t}</span>)}
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6 text-sm text-gray-400">
-              <div>
-                <h3 className="text-white font-semibold mb-1">Problem &amp; Context</h3>
-                <p>{p.problem}</p>
+            {/* Body grid */}
+            <div className="grid md:grid-cols-2 gap-4 text-sm text-content-secondary">
+              <div className="bg-surface-raised rounded-xl p-4 border border-surface-border">
+                <h3 className="text-content-primary font-bold text-xs uppercase tracking-widest mb-2">
+                  Problem &amp; Context
+                </h3>
+                <p className="leading-relaxed">{p.problem}</p>
               </div>
-              <div>
-                <h3 className="text-white font-semibold mb-1">Architecture</h3>
-                <p>{p.architecture}</p>
+              <div className="bg-surface-raised rounded-xl p-4 border border-surface-border">
+                <h3 className="text-content-primary font-bold text-xs uppercase tracking-widest mb-2">
+                  Architecture
+                </h3>
+                <p className="leading-relaxed">{p.architecture}</p>
               </div>
-              <div>
-                <h3 className="text-white font-semibold mb-1">Key Features</h3>
-                <ul className="list-disc list-inside space-y-1">
-                  {p.features.map((f) => <li key={f}>{f}</li>)}
+              <div className="bg-surface-raised rounded-xl p-4 border border-surface-border">
+                <h3 className="text-content-primary font-bold text-xs uppercase tracking-widest mb-2">
+                  Key Features
+                </h3>
+                <ul className="space-y-1.5">
+                  {p.features.map((f) => (
+                    <li key={f} className="flex gap-2">
+                      <span className="text-primary mt-0.5 shrink-0 font-bold">✓</span>
+                      <span>{f}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
-              <div>
-                <h3 className="text-white font-semibold mb-1">Challenges &amp; Debugging</h3>
-                <ul className="list-disc list-inside space-y-1">
-                  {p.challenges.map((c) => <li key={c}>{c}</li>)}
+              <div className="bg-primary/5 rounded-xl p-4 border border-primary/20">
+                <h3 className="text-primary font-bold text-xs uppercase tracking-widest mb-2">
+                  Challenges &amp; Debugging
+                </h3>
+                <ul className="space-y-1.5">
+                  {p.challenges.map((c) => (
+                    <li key={c} className="flex gap-2">
+                      <span className="text-primary mt-0.5 shrink-0">→</span>
+                      <span className="text-content-secondary leading-relaxed">{c}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
 
-            <div className="flex gap-4 mt-6 pt-5 border-t border-gray-800">
-              <a href={p.github} target="_blank" rel="noreferrer" className="btn-secondary text-sm">
+            {/* Footer links */}
+            <div className="flex gap-3 mt-6 pt-5 border-t border-surface-border">
+              <a href={p.github} target="_blank" rel="noreferrer" className="btn-secondary text-xs">
                 GitHub →
               </a>
               {p.demo && (
-                <a href={p.demo} target="_blank" rel="noreferrer" className="btn-primary text-sm">
+                <a href={p.demo} target="_blank" rel="noreferrer" className="btn-primary text-xs">
                   Live Demo →
                 </a>
               )}

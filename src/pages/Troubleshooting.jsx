@@ -9,7 +9,7 @@ const incidents = [
     investigation:
       'Opened browser DevTools → Network tab and saw a 404 response. Compared the URL the button was generating against the registered routes in Program.cs — the route template used {listingId} but the controller action parameter was named id, causing the model binder to receive null.',
     fix:
-      'Renamed the route parameter to match the action parameter. Added a guard clause to return 400 Bad Request if the id is null or zero to surface future mismatches early.',
+      'Renamed the route parameter to match the action parameter. Added a guard clause to return 400 Bad Request if id is null or zero to surface future mismatches early.',
     lesson:
       'Always check the Network tab before assuming the issue is in JavaScript. A 404 from a controller route mismatch looks identical to a JS error at the surface level.',
     tags: ['routing', 'debugging', 'ASP.NET Core'],
@@ -64,52 +64,61 @@ const incidents = [
 export default function Troubleshooting() {
   return (
     <section className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
-      <p className="font-mono text-sky-400 text-xs uppercase tracking-widest mb-3">
-        Debugging &amp; Lessons Learned
-      </p>
+      <p className="section-label">Debugging &amp; Lessons Learned</p>
       <h1 className="section-heading">Troubleshooting Stories</h1>
       <p className="section-subheading">
-        Real bugs I investigated and fixed — each write-up covers the symptom, investigation process, fix, and key takeaway.
-        Relevant for both dev and IT support roles.
+        Real bugs I investigated and fixed — each covering the symptom, investigation process,
+        fix, and key takeaway. Relevant for both dev and IT support roles.
       </p>
 
       <div className="flex flex-col gap-8">
         {incidents.map((inc) => (
           <article key={inc.id} className="card">
+            {/* Header */}
             <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
               <div>
-                <h2 className="text-xl font-bold text-white">{inc.title}</h2>
-                <p className="text-sm text-gray-500 mt-0.5">{inc.project}</p>
+                <h2 className="text-lg font-bold text-content-primary">{inc.title}</h2>
+                <p className="text-xs text-content-muted font-semibold mt-0.5">{inc.project}</p>
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {inc.tags.map((tag) => (
-                  <span key={tag} className="inline-flex px-2 py-0.5 rounded text-xs bg-gray-800 text-gray-400 border border-gray-700">
-                    {tag}
-                  </span>
+                  <span key={tag} className="tag">{tag}</span>
                 ))}
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-2 mb-5">
+            {/* Stack */}
+            <div className="flex flex-wrap gap-2 mb-6">
               {inc.stack.map((t) => <span key={t} className="badge">{t}</span>)}
             </div>
 
-            <div className="grid md:grid-cols-2 gap-5 text-sm text-gray-400">
-              <div>
-                <h3 className="text-white font-semibold mb-1">Symptom</h3>
-                <p>{inc.symptom}</p>
+            {/* 2-col content grid */}
+            <div className="grid md:grid-cols-2 gap-4 text-sm">
+              <div className="bg-surface-raised rounded-xl p-4 border border-surface-border">
+                <h3 className="text-content-primary font-bold text-xs uppercase tracking-widest mb-2">
+                  Symptom
+                </h3>
+                <p className="text-content-secondary leading-relaxed">{inc.symptom}</p>
               </div>
-              <div>
-                <h3 className="text-white font-semibold mb-1">Investigation</h3>
-                <p>{inc.investigation}</p>
+              <div className="bg-surface-raised rounded-xl p-4 border border-surface-border">
+                <h3 className="text-content-primary font-bold text-xs uppercase tracking-widest mb-2">
+                  Investigation
+                </h3>
+                <p className="text-content-secondary leading-relaxed">{inc.investigation}</p>
               </div>
-              <div>
-                <h3 className="text-white font-semibold mb-1">Fix</h3>
-                <p>{inc.fix}</p>
+              <div className="bg-surface-raised rounded-xl p-4 border border-surface-border">
+                <h3 className="text-content-primary font-bold text-xs uppercase tracking-widest mb-2">
+                  Fix Applied
+                </h3>
+                <p className="text-content-secondary leading-relaxed">{inc.fix}</p>
               </div>
-              <div className="bg-sky-500/5 border border-sky-500/20 rounded-lg p-4">
-                <h3 className="text-sky-400 font-semibold mb-1">Key Lesson</h3>
-                <p className="text-gray-300">{inc.lesson}</p>
+              <div className="bg-primary/5 rounded-xl p-4 border border-primary/20">
+                <h3 className="text-primary font-bold text-xs uppercase tracking-widest mb-2">
+                  Key Lesson
+                </h3>
+                <p className="text-content-primary leading-relaxed font-semibold text-sm">
+                  {inc.lesson}
+                </p>
               </div>
             </div>
           </article>
