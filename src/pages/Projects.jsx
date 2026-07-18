@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 const projects = [
   {
@@ -23,6 +23,35 @@ const projects = [
     github: 'https://github.com/Fadeelay',
     demo: null,
     status: 'complete',
+  },
+  {
+    id: 5,
+    title: 'Not Your Average NPC',
+    role: '5-Person Capstone Team — Database Design & AI/ML Support',
+    stack: ['Unity', 'C#', 'ASP.NET Core', 'PostgreSQL', 'Redis', 'Qdrant', 'ONNX', 'Docker'],
+    problem:
+      'Capstone team project: build a detective interrogation game where a suspect’s dialogue and behavior adapt to how the player actually investigates, instead of following a static, pre-scripted dialogue tree — backed by a persistent, backend-authoritative game state rather than client-side scripting.',
+    architecture:
+      'A Unity 3D client (raycast-based world interaction, chat-style dialogue UI, notebook and keypad systems) talks to an ASP.NET Core backend over HTTP/JSON. The backend is the sole source of truth for progression, clue discovery, and suspect state — Unity never decides outcomes locally. PostgreSQL persists that state, Redis caches intent-classification results, and Qdrant does vector-based intent retrieval that feeds an optional LLM-assisted dialogue layer, all orchestrated behind a progression engine that enforces the interrogation’s rules.',
+    features: [
+      'Designed and implemented the PostgreSQL schema — Players, Npcs, PlayerNpcStates, ProgressionSessions, Interactions, ActionCatalog, DialogueTemplates, and Lore tables — as the authoritative store for all runtime gameplay state',
+      'Modeled the evolving player↔suspect relationship (trust, patience, curiosity, openness) as a composite-key PlayerNpcStates table so behavior stays consistent across a session instead of resetting each interaction',
+      'Set up and seeded the Qdrant vector database used for intent-based dialogue classification, and helped train the embedding models that map free-text player questions onto supported interrogation actions',
+      'Kept ProgressionSessions (clue history, proof tier, composure state) as the backend’s live session record, so multi-step interrogations survive across requests instead of relying on in-memory state',
+    ],
+    challenges: [
+      'Confession progression based on clue possession alone let players reach a confession before actually raising the key evidence with the suspect — fixed by requiring both clue discovery and clue discussion before confession became eligible in the schema/logic.',
+      'Early state tracking relied on in-memory values that didn’t survive backend restarts or reconnects — moved session, interaction, and player-NPC state fully into PostgreSQL so the backend could recover cleanly and stay authoritative over Unity.',
+    ],
+    github: 'https://github.com/YakshSharma2004/testapunity',
+    demo: null,
+    status: 'complete',
+    images: [
+      { src: '/projects/npc-detective-game/gameplay-confront.jpg', alt: 'Unity gameplay: confronting the suspect Dylan with gathered clues' },
+      { src: '/projects/npc-detective-game/clue-inspection.jpg', alt: 'Player inspecting a clue on a desk in the 3D scene' },
+      { src: '/projects/npc-detective-game/casebook-notebook.jpg', alt: 'In-game casebook notebook tracking discovered evidence' },
+      { src: '/projects/npc-detective-game/er-diagram.png', alt: 'PostgreSQL entity-relationship diagram for the game backend' },
+    ],
   },
   {
     id: 2,
