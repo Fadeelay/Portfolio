@@ -54,6 +54,35 @@ const projects = [
     ],
   },
   {
+    id: 6,
+    title: 'Clinic Waitlist System',
+    role: '3-Person Team Project — Backend API & Real-Time Queue',
+    stack: ['React', 'Tailwind CSS', 'Node.js', 'Express', 'MongoDB', 'Mongoose', 'JWT', 'Server-Sent Events'],
+    problem:
+      'Clinic patients faced long, disorganized in-person queues with no visibility into their wait status, while front-desk staff needed a fast way to register walk-ins, avoid double check-ins, and track patient status — without adopting a full EHR system.',
+    architecture:
+      'A React/Tailwind frontend (public waitlist form, live queue board, staff dashboard) talks to an Express/MongoDB backend over a REST API. The backend mints sequential 6-digit patient tickets from an atomic Counter document, blocks duplicate check-ins at both the application and database level, and pushes live queue updates to staff dashboards and a public "TV queue" board over Server-Sent Events instead of polling.',
+    features: [
+      'Built the patient/ticket data model and duplicate-booking guard: normalizes name + phone (accent-stripping, digits-only) and blocks a second active check-in for the same person via an application-level query backed by a partial unique MongoDB index on (nameNorm, contactDigits) while status is "waiting"',
+      'Implemented atomic 6-digit ticket numbering with a dedicated Counter collection (findOneAndUpdate + $inc) so simultaneous check-ins never collide on the same number',
+      'Built the SSE hub that pushes live patient-list updates to each staff member\'s own dashboard and a separate public TV Queue board, replacing polling with real-time push updates',
+      'JWT-protected staff routes (My Patients, status updates, deletes) scoped so each staff member only sees and edits the patients they registered',
+    ],
+    challenges: [
+      'Two people submitting the same name/phone within milliseconds of each other could both pass the application-level duplicate check before either was saved — fixed by backing the check with a partial unique MongoDB index, so the database itself rejects the race condition, with the controller catching the resulting E11000 error and returning a friendly "already on the waitlist" response instead of a 500.',
+      'SSE connections needed to be scoped per staff member rather than broadcast to everyone in the clinic — solved by keying the connection map by staffId and only pushing patient updates to the sockets belonging to the staff member who registered that patient.',
+    ],
+    github: null,
+    demo: null,
+    status: 'complete',
+    images: [
+      { src: '/projects/clinic-waitlist/home.png', alt: 'Clinic Waitlist landing page with Join Waitlist, Live Queue, and Staff Dashboard options' },
+      { src: '/projects/clinic-waitlist/waitlist-success.png', alt: 'Waitlist form after registering, showing the assigned 6-digit ticket number' },
+      { src: '/projects/clinic-waitlist/staff-dashboard.png', alt: 'Staff My Patients dashboard with a live-updating patient list' },
+      { src: '/projects/clinic-waitlist/tv-queue.png', alt: 'Public TV queue board showing waiting patients by ticket number' },
+    ],
+  },
+  {
     id: 2,
     title: 'Campus Job Board (StudentHustle)',
     role: 'Full-Stack Developer (Solo)',
@@ -263,16 +292,20 @@ export default function Projects() {
             {p.images && <Slideshow images={p.images} />}
 
             {/* Footer links */}
-            <div className="flex gap-3 mt-6 pt-5 border-t border-surface-border">
-              <a href={p.github} target="_blank" rel="noreferrer" className="btn-secondary text-xs">
-                GitHub →
-              </a>
-              {p.demo && (
-                <a href={p.demo} target="_blank" rel="noreferrer" className="btn-primary text-xs">
-                  Live Demo →
-                </a>
-              )}
-            </div>
+            {(p.github || p.demo) && (
+              <div className="flex gap-3 mt-6 pt-5 border-t border-surface-border">
+                {p.github && (
+                  <a href={p.github} target="_blank" rel="noreferrer" className="btn-secondary text-xs">
+                    GitHub →
+                  </a>
+                )}
+                {p.demo && (
+                  <a href={p.demo} target="_blank" rel="noreferrer" className="btn-primary text-xs">
+                    Live Demo →
+                  </a>
+                )}
+              </div>
+            )}
           </article>
         ))}
       </div>
