@@ -3,26 +3,26 @@ import { Link } from 'react-router-dom'
 const techBadges = [
   'C# / ASP.NET Core',
   'Java / Spring Boot',
-  'Python',
   'React',
   'Node.js',
-  'SQL / MySQL',
+  'PostgreSQL',
+  'MongoDB',
   'EF Core',
   'Git / GitHub',
 ]
 
 const stats = [
   {
-    value: '6+',
+    value: '4',
     label: 'Case Study Projects',
     delta: 'Multiple stacks',
     desc: 'Production-minded apps with documented architecture and real debugging stories.',
   },
   {
-    value: '4',
+    value: '3',
     label: 'Languages & Runtimes',
-    delta: 'C# · Java · Python · JS',
-    desc: 'Depth in one primary stack, consistent engineering principles across all four.',
+    delta: 'C# · Java · JS',
+    desc: 'Depth in one primary stack, consistent engineering principles across all three.',
   },
   {
     value: 'Full-Stack',
@@ -52,7 +52,7 @@ export default function Home() {
 
         <p className="max-w-2xl text-lg text-content-secondary mb-10 leading-relaxed">
           Recent computer programming diploma graduate. I build and support real-world web
-          applications using C#, Java, Python, React, and Node.js — focused on clean
+          applications using C#, Java, React, and Node.js — focused on clean
           architecture, reliable APIs, and end-to-end delivery.
         </p>
 
@@ -104,7 +104,7 @@ export default function Home() {
                 Full-Stack Developer (Solo) · ASP.NET Core + EF Core
               </p>
             </div>
-            <span className="badge-success shrink-0">Complete</span>
+            <span className="badge-warning shrink-0">In Progress</span>
           </div>
           <p className="text-content-secondary text-sm leading-relaxed mb-5">
             A full-stack app with layered architecture, role-based access control

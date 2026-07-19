@@ -41,8 +41,7 @@ export default function About() {
           <strong className="text-content-primary font-bold">ASP.NET Core (C#)</strong> and{' '}
           <strong className="text-content-primary font-bold">React + Node.js</strong>, with
           solid project experience in{' '}
-          <strong className="text-content-primary font-bold">Java Spring Boot</strong> and{' '}
-          <strong className="text-content-primary font-bold">Python</strong> as well. I care
+          <strong className="text-content-primary font-bold">Java Spring Boot</strong> as well. I care
           about writing code that's maintainable and well-structured — not just code that works.
         </p>
         <p>

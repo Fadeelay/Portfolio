@@ -20,12 +20,10 @@ A personal portfolio site showing my skills and project work for job prospects �
 
 ## Projects Featured
 
-- **Real Estate Listing Platform** — ASP.NET Core + EF Core + SQL Server
+- **Real Estate Listing Platform** — ASP.NET Core + EF Core + SQL Server (in progress)
 - **Not Your Average NPC** — Unity + ASP.NET Core detective game prototype (5-person capstone team; database design + AI/ML support)
 - **Clinic Waitlist System** — React + Express + MongoDB real-time patient queue (3-person team project; backend + real-time queue)
 - **Campus Job Board (StudentHustle)** — Spring Boot + Spring Security + PostgreSQL, deployed on Render
-- **Full-Stack JavaScript Marketplace** — Node.js + Express + React + MongoDB
-- **Python Data Analysis Script** — pandas + matplotlib
 
 ## Getting Started
 

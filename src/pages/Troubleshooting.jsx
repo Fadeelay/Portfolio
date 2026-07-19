@@ -31,33 +31,63 @@ const incidents = [
   },
   {
     id: 3,
-    title: 'CORS Blocking React → Spring Boot API',
-    project: 'Job & Contract Marketplace',
-    stack: ['Java', 'Spring Boot', 'React'],
+    title: 'Interrogation State Lost on Backend Restart',
+    project: 'Not Your Average NPC',
+    stack: ['PostgreSQL', 'ASP.NET Core', 'C#'],
     symptom:
-      'React fetch calls to the Spring Boot API returned a CORS error in the browser console; the backend received the request and returned 200 but the browser blocked the response.',
+      'Discovered clues, dialogue history, and progression state occasionally reset mid-playtest even though the interrogation was still active from the player\'s point of view — most noticeable after a backend restart or a client reconnect.',
     investigation:
-      'Read the browser error: "No Access-Control-Allow-Origin header present". Checked the Spring Boot config — the @CrossOrigin annotation was on the controller but only permitted http://localhost:3000 while the Vite dev server ran on port 5173.',
+      'Traced session handling and found progression state was being kept in memory rather than written through to the database on every change, so it only survived for the lifetime of the running process.',
     fix:
-      'Updated @CrossOrigin to allow both ports during development and moved the CORS config to a global WebMvcConfigurer bean so it applies to all controllers.',
+      'Moved ProgressionSessions, Interactions, and PlayerNpcStates to be persisted to PostgreSQL on every state-changing request instead of cached in memory, so a restart or reconnect could rehydrate the exact session state from the database.',
     lesson:
-      'CORS errors are always a server-side configuration issue, not a React issue. The browser error message contains the exact missing header — read it first before changing any frontend code.',
-    tags: ['CORS', 'Spring Boot', 'React', 'networking'],
+      'For any multi-step workflow where correctness matters, treat the database as the source of truth from day one — an in-memory cache makes a demo look fine right up until the first restart or reconnect during a live playtest.',
+    tags: ['PostgreSQL', 'persistence', 'backend', 'state management'],
   },
   {
     id: 4,
-    title: 'JPA N+1 Query on Applications List',
-    project: 'Job & Contract Marketplace',
-    stack: ['Java', 'Spring Boot', 'JPA'],
+    title: 'Confession Reachable Before Key Evidence Was Discussed',
+    project: 'Not Your Average NPC',
+    stack: ['PostgreSQL', 'C#', 'ASP.NET Core'],
     symptom:
-      'The applications list page loaded slowly and Hibernate logs showed dozens of SELECT queries firing for what should have been one list fetch.',
+      'Players could trigger the suspect\'s confession after only discovering the key clues, without ever actually raising them in dialogue — the interrogation felt broken because confessions came out of nowhere.',
     investigation:
-      'Enabled Hibernate SQL logging (spring.jpa.show-sql=true) and counted the queries. Each Application entity triggered a separate SELECT for its related User — a classic N+1 caused by the default LAZY fetch type on the @ManyToOne User relationship.',
+      'Found that confession-eligibility logic checked only clue possession (DiscoveredClueIdsJson) and never checked whether those clues had actually been brought up with the suspect.',
     fix:
-      'Added @EntityGraph to the repository method to eagerly join User in one query. Kept the default LAZY elsewhere to avoid loading unnecessary data globally.',
+      'Added a separate DiscussedClueIdsJson track and updated the progression rule so confession requires the key evidence to appear in both "discovered" and "discussed" before it becomes eligible.',
     lesson:
-      'Always check Hibernate SQL logs when a list page feels slow. @EntityGraph is the surgical fix — it eager-loads only for the specific query that needs it without changing the global fetch strategy.',
-    tags: ['JPA', 'performance', 'Hibernate', 'N+1'],
+      '"The player knows X" and "the player has actually used X in conversation" needed to be modeled as two distinct, separately tracked states — collapsing them into one field masked a real gameplay logic bug.',
+    tags: ['game logic', 'PostgreSQL', 'progression', 'debugging'],
+  },
+  {
+    id: 5,
+    title: 'Duplicate Waitlist Entries From a Race Condition',
+    project: 'Clinic Waitlist System',
+    stack: ['Node.js', 'Express', 'MongoDB'],
+    symptom:
+      'Two near-simultaneous submissions with the same name and phone number could occasionally both succeed, creating two active tickets for the same patient instead of the intended single entry.',
+    investigation:
+      'The duplicate check was a plain findOne query run before the insert. Under concurrent requests, both requests could pass that check before either document was actually saved — a classic check-then-act race condition.',
+    fix:
+      'Added a partial unique MongoDB index on (nameNorm, contactDigits) scoped to status: "waiting" so the database itself rejects the second insert; the controller catches the resulting E11000 duplicate-key error and returns a friendly "already on the waitlist" response instead of a 500.',
+    lesson:
+      'Application-level duplicate checks aren\'t safe under concurrency — only a database-level unique index can atomically guarantee "at most one" across simultaneous requests.',
+    tags: ['MongoDB', 'race condition', 'concurrency', 'validation'],
+  },
+  {
+    id: 6,
+    title: 'Staff Seeing Other Staff\'s Patients on the Live Dashboard',
+    project: 'Clinic Waitlist System',
+    stack: ['Node.js', 'Express', 'Server-Sent Events'],
+    symptom:
+      'Early in development, a patient status update from one staff member\'s session occasionally appeared on another staff member\'s dashboard, even though each staff member should only see the patients they registered.',
+    investigation:
+      'The initial SSE hub kept one shared set of connected clients and broadcast every update to all of them, instead of routing each update to the specific staff member who owned that patient.',
+    fix:
+      'Reworked the SSE hub to key connections by staffId (a Map of staffId → Set of open connections) and push updates only to the connections belonging to the patient\'s addedBy/staffId — matching the scoping already enforced on the REST endpoints.',
+    lesson:
+      'Real-time channels need the same authorization scoping as the REST API behind them — it\'s easy to ship the "broadcast to everyone" version first and forget to narrow it before multiple staff are using it concurrently.',
+    tags: ['SSE', 'real-time', 'authorization', 'Node.js'],
   },
 ]
 

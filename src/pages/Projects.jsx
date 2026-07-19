@@ -22,7 +22,7 @@ const projects = [
     ],
     github: 'https://github.com/Fadeelay',
     demo: null,
-    status: 'complete',
+    status: 'in-progress',
   },
   {
     id: 5,
@@ -113,46 +113,6 @@ const projects = [
       { src: '/projects/campus-job-board/student-jobs.png', alt: 'Student job search with location, category, and salary filters' },
       { src: '/projects/campus-job-board/employer-post-job.png', alt: 'Employer post-a-job form' },
     ],
-  },
-  {
-    id: 3,
-    title: 'Full-Stack JavaScript Marketplace',
-    role: 'Full-Stack Developer (Solo)',
-    stack: ['Node.js', 'Express', 'React', 'MongoDB', 'JWT'],
-    problem: 'A buy/sell marketplace demonstrating a full JavaScript stack from database to UI.',
-    architecture:
-      'Express REST API with Mongoose models, React frontend with React Router, context for auth state.',
-    features: [
-      'User registration and JWT login',
-      'Listing creation with image support',
-      'Search, filter, and pagination',
-      'Protected seller dashboard',
-    ],
-    challenges: [
-      'Handled async race conditions in React state when multiple filters were applied simultaneously.',
-    ],
-    github: 'https://github.com/Fadeelay',
-    demo: null,
-    status: 'in-progress',
-  },
-  {
-    id: 4,
-    title: 'Python Data Analysis Script',
-    role: 'Developer (Solo)',
-    stack: ['Python', 'pandas', 'matplotlib'],
-    problem: 'Automated processing and visualization of structured datasets for academic analysis.',
-    architecture: 'Single-module Python script with pandas for data wrangling and matplotlib for charting.',
-    features: [
-      'CSV ingestion and cleaning',
-      'Statistical summaries and trend analysis',
-      'Chart export (bar, line, scatter)',
-    ],
-    challenges: [
-      'Handled inconsistent date formats across input files using pandas date parsing with error coercion.',
-    ],
-    github: 'https://github.com/Fadeelay',
-    demo: null,
-    status: 'complete',
   },
 ]
 
