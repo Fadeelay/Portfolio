@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 
+const BASE = import.meta.env.BASE_URL
+
 const projects = [
   {
     id: 1,
@@ -47,10 +49,10 @@ const projects = [
     demo: null,
     status: 'complete',
     images: [
-      { src: '/projects/npc-detective-game/gameplay-confront.jpg', alt: 'Unity gameplay: confronting the suspect Dylan with gathered clues' },
-      { src: '/projects/npc-detective-game/clue-inspection.jpg', alt: 'Player inspecting a clue on a desk in the 3D scene' },
-      { src: '/projects/npc-detective-game/casebook-notebook.jpg', alt: 'In-game casebook notebook tracking discovered evidence' },
-      { src: '/projects/npc-detective-game/er-diagram.png', alt: 'PostgreSQL entity-relationship diagram for the game backend' },
+      { src: `${BASE}projects/npc-detective-game/gameplay-confront.jpg`, alt: 'Unity gameplay: confronting the suspect Dylan with gathered clues' },
+      { src: `${BASE}projects/npc-detective-game/clue-inspection.jpg`, alt: 'Player inspecting a clue on a desk in the 3D scene' },
+      { src: `${BASE}projects/npc-detective-game/casebook-notebook.jpg`, alt: 'In-game casebook notebook tracking discovered evidence' },
+      { src: `${BASE}projects/npc-detective-game/er-diagram.png`, alt: 'PostgreSQL entity-relationship diagram for the game backend' },
     ],
   },
   {
@@ -76,10 +78,10 @@ const projects = [
     demo: null,
     status: 'complete',
     images: [
-      { src: '/projects/clinic-waitlist/home.png', alt: 'Clinic Waitlist landing page with Join Waitlist, Live Queue, and Staff Dashboard options' },
-      { src: '/projects/clinic-waitlist/waitlist-success.png', alt: 'Waitlist form after registering, showing the assigned 6-digit ticket number' },
-      { src: '/projects/clinic-waitlist/staff-dashboard.png', alt: 'Staff My Patients dashboard with a live-updating patient list' },
-      { src: '/projects/clinic-waitlist/tv-queue.png', alt: 'Public TV queue board showing waiting patients by ticket number' },
+      { src: `${BASE}projects/clinic-waitlist/home.png`, alt: 'Clinic Waitlist landing page with Join Waitlist, Live Queue, and Staff Dashboard options' },
+      { src: `${BASE}projects/clinic-waitlist/waitlist-success.png`, alt: 'Waitlist form after registering, showing the assigned 6-digit ticket number' },
+      { src: `${BASE}projects/clinic-waitlist/staff-dashboard.png`, alt: 'Staff My Patients dashboard with a live-updating patient list' },
+      { src: `${BASE}projects/clinic-waitlist/tv-queue.png`, alt: 'Public TV queue board showing waiting patients by ticket number' },
     ],
   },
   {
@@ -108,10 +110,10 @@ const projects = [
     demo: 'https://campusjobboard.onrender.com',
     status: 'complete',
     images: [
-      { src: '/projects/campus-job-board/home.png', alt: 'StudentHustle landing page with job search' },
-      { src: '/projects/campus-job-board/admin-jobs.png', alt: 'Admin job moderation queue with approve/reject actions' },
-      { src: '/projects/campus-job-board/student-jobs.png', alt: 'Student job search with location, category, and salary filters' },
-      { src: '/projects/campus-job-board/employer-post-job.png', alt: 'Employer post-a-job form' },
+      { src: `${BASE}projects/campus-job-board/home.png`, alt: 'StudentHustle landing page with job search' },
+      { src: `${BASE}projects/campus-job-board/admin-jobs.png`, alt: 'Admin job moderation queue with approve/reject actions' },
+      { src: `${BASE}projects/campus-job-board/student-jobs.png`, alt: 'Student job search with location, category, and salary filters' },
+      { src: `${BASE}projects/campus-job-board/employer-post-job.png`, alt: 'Employer post-a-job form' },
     ],
   },
 ]

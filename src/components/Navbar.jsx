@@ -42,7 +42,7 @@ export default function Navbar() {
 
         {/* Resume CTA */}
         <a
-          href="/resume.pdf"
+          href={`${import.meta.env.BASE_URL}resume.pdf`}
           target="_blank"
           rel="noreferrer"
           className="hidden md:inline-flex btn-primary shrink-0"
