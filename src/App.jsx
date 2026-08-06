@@ -9,7 +9,7 @@ import Troubleshooting from './pages/Troubleshooting'
 
 export default function App() {
   return (
-    <BrowserRouter basename="/Portfolio">
+    <BrowserRouter basename="/">
       <div className="min-h-screen flex flex-col">
         <Navbar />
         <main className="flex-1">
