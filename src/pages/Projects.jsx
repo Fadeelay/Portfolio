@@ -3,28 +3,37 @@ import React, { useState } from 'react'
 const BASE = import.meta.env.BASE_URL
 
 const projects = [
-  {
-    id: 1,
-    title: 'Real Estate Listing Platform',
+ {
+    id: 2,
+    title: 'Campus Job Board (StudentHustle)',
     role: 'Full-Stack Developer (Solo)',
-    stack: ['ASP.NET Core', 'EF Core', 'SQL Server', 'Bootstrap', 'C#'],
+    stack: ['Java 21', 'Spring Boot', 'Spring Security', 'Thymeleaf', 'PostgreSQL', 'Docker', 'Render'],
     problem:
-      'Needed a property listing system where admins manage the platform, agents post listings, and buyers browse and save favourites.',
+      'University students need one place to find on-campus and local jobs; employers need to post and manage listings; and the platform needs moderation so unapproved or spam postings never reach students.',
     architecture:
-      'Three-layer architecture: controllers handle HTTP, services contain business logic, repositories abstract EF Core data access.',
+      'Layered Spring Boot app (controller → service → repository) split into role-scoped routes (/student, /employer, /admin). A session-based Thymeleaf UI and a stateless JSON API (/api/**) share the same domain model but run through two separate Spring Security filter chains — form login for the web app, HTTP Basic for the API. Deployed as a Docker image on Render with a managed PostgreSQL database; a Spring profile (application-render.properties) swaps the local MySQL datasource for Postgres at deploy time via env vars, so the app code never changes between environments.',
     features: [
-      'Role-based auth: Admin / Agent / User with protected routes',
-      'CRUD listings with image upload',
-      'Search and filter by price, location, and type',
-      'Admin dashboard for user and listing management',
+      'Three role-based dashboards (Student, Employer, Admin) gated entirely by Spring Security',
+      'Employer job postings stay PENDING until an admin approves or rejects them from a moderation queue',
+      'Students filter live listings by location, category, and salary range via dynamically composed JPA Specifications',
+      'One application per student per job enforced with a DB unique constraint plus a friendly error page',
+      'Employers move applicants through status stages (Applied → Reviewed → ...) per job posting',
+      'Built-in admin log viewer — a custom Logback appender feeds a thread-safe ring buffer so admins can see recent server activity without shelling into the box',
     ],
     challenges: [
-      'Fixed a route mismatch that caused the delete button to silently fail — traced through DevTools and ASP.NET routing logs.',
-      'Resolved ModelState validation errors that blocked listing creation when optional image fields were omitted.',
+      'Serving both a stateful Thymeleaf UI and a stateless JSON API from one app meant one security config would compromise the other — split into two @Order-ed SecurityFilterChains scoped by securityMatcher("/api/**"), each with its own auth scheme and exception handling.',
+      'Local development runs on MySQL but Render only offers managed Postgres — resolved with a SPRING_PROFILES_ACTIVE=render profile that swaps the JDBC URL/driver at deploy time instead of hardcoding a database.',
+      'A student double-clicking "Apply" could beat the app-level check and insert two applications — added a DB-level unique constraint on (job_id, student_id) plus a DuplicateApplicationException caught by a global exception handler for a clean error page instead of a 500.',
     ],
-    github: 'https://github.com/Fadeelay',
-    demo: null,
-    status: 'in-progress',
+    github: 'https://github.com/Fadeelay/campusjobboard1',
+    demo: 'https://campusjobboard.onrender.com',
+    status: 'complete',
+    images: [
+      { src: `${BASE}projects/campus-job-board/home.png`, alt: 'StudentHustle landing page with job search' },
+      { src: `${BASE}projects/campus-job-board/admin-jobs.png`, alt: 'Admin job moderation queue with approve/reject actions' },
+      { src: `${BASE}projects/campus-job-board/student-jobs.png`, alt: 'Student job search with location, category, and salary filters' },
+      { src: `${BASE}projects/campus-job-board/employer-post-job.png`, alt: 'Employer post-a-job form' },
+    ],
   },
   {
     id: 5,
@@ -84,37 +93,29 @@ const projects = [
       { src: `${BASE}projects/clinic-waitlist/tv-queue.png`, alt: 'Public TV queue board showing waiting patients by ticket number' },
     ],
   },
+
   {
-    id: 2,
-    title: 'Campus Job Board (StudentHustle)',
+    id: 1,
+    title: 'Real Estate Listing Platform',
     role: 'Full-Stack Developer (Solo)',
-    stack: ['Java 21', 'Spring Boot', 'Spring Security', 'Thymeleaf', 'PostgreSQL', 'Docker', 'Render'],
+    stack: ['ASP.NET Core', 'EF Core', 'SQL Server', 'Bootstrap', 'C#'],
     problem:
-      'University students need one place to find on-campus and local jobs; employers need to post and manage listings; and the platform needs moderation so unapproved or spam postings never reach students.',
+      'Needed a property listing system where admins manage the platform, agents post listings, and buyers browse and save favourites.',
     architecture:
-      'Layered Spring Boot app (controller → service → repository) split into role-scoped routes (/student, /employer, /admin). A session-based Thymeleaf UI and a stateless JSON API (/api/**) share the same domain model but run through two separate Spring Security filter chains — form login for the web app, HTTP Basic for the API. Deployed as a Docker image on Render with a managed PostgreSQL database; a Spring profile (application-render.properties) swaps the local MySQL datasource for Postgres at deploy time via env vars, so the app code never changes between environments.',
+      'Three-layer architecture: controllers handle HTTP, services contain business logic, repositories abstract EF Core data access.',
     features: [
-      'Three role-based dashboards (Student, Employer, Admin) gated entirely by Spring Security',
-      'Employer job postings stay PENDING until an admin approves or rejects them from a moderation queue',
-      'Students filter live listings by location, category, and salary range via dynamically composed JPA Specifications',
-      'One application per student per job enforced with a DB unique constraint plus a friendly error page',
-      'Employers move applicants through status stages (Applied → Reviewed → ...) per job posting',
-      'Built-in admin log viewer — a custom Logback appender feeds a thread-safe ring buffer so admins can see recent server activity without shelling into the box',
+      'Role-based auth: Admin / Agent / User with protected routes',
+      'CRUD listings with image upload',
+      'Search and filter by price, location, and type',
+      'Admin dashboard for user and listing management',
     ],
     challenges: [
-      'Serving both a stateful Thymeleaf UI and a stateless JSON API from one app meant one security config would compromise the other — split into two @Order-ed SecurityFilterChains scoped by securityMatcher("/api/**"), each with its own auth scheme and exception handling.',
-      'Local development runs on MySQL but Render only offers managed Postgres — resolved with a SPRING_PROFILES_ACTIVE=render profile that swaps the JDBC URL/driver at deploy time instead of hardcoding a database.',
-      'A student double-clicking "Apply" could beat the app-level check and insert two applications — added a DB-level unique constraint on (job_id, student_id) plus a DuplicateApplicationException caught by a global exception handler for a clean error page instead of a 500.',
+      'Fixed a route mismatch that caused the delete button to silently fail — traced through DevTools and ASP.NET routing logs.',
+      'Resolved ModelState validation errors that blocked listing creation when optional image fields were omitted.',
     ],
-    github: 'https://github.com/Fadeelay/campusjobboard1',
-    demo: 'https://campusjobboard.onrender.com',
-    status: 'complete',
-    images: [
-      { src: `${BASE}projects/campus-job-board/home.png`, alt: 'StudentHustle landing page with job search' },
-      { src: `${BASE}projects/campus-job-board/admin-jobs.png`, alt: 'Admin job moderation queue with approve/reject actions' },
-      { src: `${BASE}projects/campus-job-board/student-jobs.png`, alt: 'Student job search with location, category, and salary filters' },
-      { src: `${BASE}projects/campus-job-board/employer-post-job.png`, alt: 'Employer post-a-job form' },
-    ],
+    github: null,
+    demo: null,
+    status: 'in-progress',
   },
 ]
 
