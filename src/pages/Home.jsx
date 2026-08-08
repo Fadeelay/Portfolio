@@ -45,15 +45,13 @@ export default function Home() {
         </div>
 
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-content-primary leading-tight mb-6">
-          Junior Full-Stack Developer
+          Full-Stack Developer
           <br />
           <span className="text-primary">&amp; IT Support Specialist</span>
         </h1>
 
         <p className="max-w-2xl text-lg text-content-secondary mb-10 leading-relaxed">
-          Recent computer programming diploma graduate. I build and support real-world web
-          applications using C#, Java, React, and Node.js — focused on clean
-          architecture, reliable APIs, and end-to-end delivery.
+          I’m a full‑stack .NET/React developer based in Red Deer, Alberta, with a Computer Programming diploma and experience building secure APIs, trading automation systems, and web applications. I work with C#, ASP.NET Core, React, SQL, Docker, and Python for data and machine learning, with a strong focus on security and automation.
         </p>
 
         <div className="flex flex-wrap gap-3 mb-14">
