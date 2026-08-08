@@ -58,7 +58,7 @@ export default function Home() {
           <Link to="/projects" className="btn-primary">
             View Projects
           </Link>
-          <a href={`${import.meta.env.BASE_URL}resume.pdf`} target="_blank" rel="noreferrer" className="btn-secondary">
+          <a href={`${import.meta.env.BASE_URL}Fadlullah Lawal Tech.pdf`} target="_blank" rel="noreferrer" className="btn-secondary">
             Download Resume
           </a>
         </div>

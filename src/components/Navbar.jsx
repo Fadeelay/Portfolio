@@ -42,7 +42,7 @@ export default function Navbar() {
 
         {/* Resume CTA */}
         <a
-          href={`${import.meta.env.BASE_URL}resume.pdf`}
+          href={`${import.meta.env.BASE_URL}Fadlullah Lawal Tech.pdf`}
           target="_blank"
           rel="noreferrer"
           className="hidden md:inline-flex btn-primary shrink-0"
@@ -83,7 +83,7 @@ export default function Navbar() {
             </NavLink>
           ))}
           <div className="pt-2 border-t border-surface-border mt-1">
-            <a href="/resume.pdf" target="_blank" rel="noreferrer" className="btn-primary w-fit">
+            <a href="/Fadlullah Lawal Tech.pdf" target="_blank" rel="noreferrer" className="btn-primary w-fit">
               Resume
             </a>
           </div>
